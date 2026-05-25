@@ -1,0 +1,93 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX_PATIENTS 100
+struct Patient {
+ int id;
+ char name[100];
+ int age;
+ char disease[50];
+ char condition[20];
+ int active;
+};
+struct Patient patients[MAX_PATIENTS];
+int patientCount = 0;
+int nextId = 1;
+void addPatient(const char *name, int age,
+ const char *disease, const char *condition) {
+ if (patientCount >= MAX_PATIENTS) {
+ printf("Hospital is full!\n");
+ return;
+ }
+ patients[patientCount].id = nextId++;
+ strcpy(patients[patientCount].name, name);
+ patients[patientCount].age = age;
+ strcpy(patients[patientCount].disease, disease);
+ strcpy(patients[patientCount].condition, condition);
+ patients[patientCount].active = 1;
+ printf("Patient added successfully.\n");
+ printf("Patient ID = %d\n", patients[patientCount].id);
+ patientCount++;
+}
+void dischargePatient(int id) {
+ for (int i = 0; i < patientCount; i++) {
+ if (patients[i].id == id && patients[i].active) {
+ patients[i].active = 0;
+ printf("Patient Name: %s\n", patients[i].name);
+ printf("ID: %d\n discharged.\n", id);
+ return;
+ }
+ }
+ printf("Patient not found or already discharged.\n");
+}
+void visitPatient(int id) {
+ for (int i = 0; i < patientCount; i++) {
+ if (patients[i].id == id && patients[i].active) {
+ printf("Visiting patient:\n");
+ printf("ID: %d\n", patients[i].id);
+ printf("Name: %s\n", patients[i].name);
+ printf("Age: %d\n", patients[i].age);
+ printf("Disease: %s\n", patients[i].disease);
+ printf("Condition: %s\n", patients[i].condition);
+ return;
+ }
+ }
+ printf("Patient not found or discharged.\n");
+}
+int main() {
+ int choice, id, age;
+ char name[100], disease[50], condition[20];
+ while (1) {
+ printf("\nHospital Patient Management\n");
+ printf("1. Add patient\n");
+ printf("2. Discharge patient\n");
+ printf("3. Visit patient\n");
+ printf("4. Exit\n");
+ printf("Choose: ");
+ scanf("%d", &choice);
+ if (choice == 1) {
+ printf("Enter name: ");
+ scanf("%s", name);
+ printf("Enter age: ");
+ scanf("%d", &age);
+ printf("Enter disease: ");
+ scanf("%s", disease);
+ printf("Enter condition (critical/stable/recovered): ");
+ scanf("%s", condition);
+ addPatient(name, age, disease, condition);
+ } else if (choice == 2) {
+ printf("Enter patient ID to discharge: ");
+ scanf("%d", &id);
+ dischargePatient(id);
+ } else if (choice == 3) {
+ printf("Enter patient ID to visit: ");
+ scanf("%d", &id);
+ visitPatient(id);
+ } else if (choice == 4) {
+ printf("Exiting...\n");
+ break;
+ } else {
+ printf("Invalid option!\n");
+ }
+ }
+ return 0;
+}
