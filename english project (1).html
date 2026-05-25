@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>LID - Learn Idioms Daily | One Idiom Per Day</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+    }
+
+    .daily-card {
+      max-width: 750px;
+      width: 100%;
+      background: white;
+      border-radius: 48px;
+      box-shadow: 0 25px 45px -12px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .header-bg {
+      background: linear-gradient(120deg, #1f4e6e, #2c6e9e);
+      padding: 2rem 2rem 1.8rem;
+      text-align: center;
+      color: white;
+    }
+
+    .logo {
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      font-weight: 500;
+      opacity: 0.85;
+      margin-bottom: 0.8rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+
+    .tagline {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .day-progress {
+      background: rgba(255,255,255,0.2);
+      border-radius: 60px;
+      padding: 0.4rem 1rem;
+      display: inline-block;
+      margin-top: 1rem;
+      font-weight: 500;
+      font-size: 0.85rem;
+    }
+
+    .content {
+      padding: 2rem 2rem 2rem 2rem;
+    }
+
+    .idiom-header {
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
+
+    .day-badge {
+      display: inline-block;
+      background: #eef2f7;
+      padding: 0.25rem 1rem;
+      border-radius: 60px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #1f4e6e;
+      margin-bottom: 1rem;
+    }
+
+    .idiom-phrase {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: #0f2c3b;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #1f4e6e, #3a7ca5);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .phonetic {
+      color: #6f8e9e;
+      font-size: 0.85rem;
+    }
+
+    .meaning-box {
+      background: #f8fafd;
+      border-radius: 32px;
+      padding: 1.5rem;
+      margin: 1.8rem 0;
+      border-left: 6px solid #2c6e9e;
+    }
+
+    .meaning-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+      color: #2c6e9e;
+      margin-bottom: 0.6rem;
+    }
+
+    .meaning-text {
+      font-size: 1.1rem;
+      line-height: 1.5;
+      color: #1f3e4f;
+    }
+
+    .example-box {
+      background: #fff9ef;
+      border-radius: 32px;
+      padding: 1.5rem;
+      margin: 1.8rem 0;
+      border-left: 6px solid #e9b35f;
+    }
+
+    .example-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 700;
+      color: #c97e2a;
+      margin-bottom: 0.6rem;
+    }
+
+    .example-text {
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #4e3b28;
+      font-style: italic;
+    }
+
+    .progress-section {
+      background: #f0f4f8;
+      border-radius: 60px;
+      padding: 0.5rem;
+      margin: 1.5rem 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .progress-bar-container {
+      flex: 2;
+      background: #dce5ec;
+      border-radius: 40px;
+      height: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: linear-gradient(90deg, #2c6e9e, #5fa3c9);
+      width: 0%;
+      height: 100%;
+      border-radius: 40px;
+      transition: width 0.4s ease;
+    }
+
+    .progress-text {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1f4e6e;
+      background: white;
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+    }
+
+    .calendar-info {
+      text-align: center;
+      font-size: 0.8rem;
+      color: #6f8e9e;
+      margin-top: 1.2rem;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1.2rem;
+    }
+
+    .nav-buttons {
+      display: flex;
+      gap: 0.8rem;
+      justify-content: center;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: white;
+      border: 1px solid #cbdde9;
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-size: 0.85rem;
+      color: #2c5f8a;
+    }
+
+    .btn-primary {
+      background: #2c6e9e;
+      border-color: #2c6e9e;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #1f4e6e;
+      transform: translateY(-2px);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+
+    .locked-message {
+      text-align: center;
+      padding: 2rem;
+      background: #fef8e7;
+      border-radius: 32px;
+      margin: 1rem 0;
+    }
+
+    .lock-icon {
+      font-size: 3rem;
+      margin-bottom: 0.8rem;
+    }
+
+    footer {
+      background: #f8fafc;
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.7rem;
+      color: #8aa0ae;
+      border-top: 1px solid #e2edf2;
+    }
+
+    @media (max-width: 550px) {
+      body {
+        padding: 1rem;
+      }
+      .idiom-phrase {
+        font-size: 1.8rem;
+      }
+      .content {
+        padding: 1.5rem;
+      }
+      .meaning-text, .example-text {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="daily-card" id="app">
+  <div class="header-bg">
+    <div class="logo"><h1>📖LID — LEARN IDIOMS DAILY</h1></div>
+    <h2>idiom of the day</h2>
+    <div class="tagline">one phrase · unlock fluency · 90 days</div>
+    <div class="day-progress" id="dayCounterDisplay">Day -- / 90</div>
+  </div>
+
+  <div class="content" id="dynamicContent">
+    <!-- dynamic content will be injected here -->
+    <div style="text-align: center; padding: 3rem;">Loading your daily idiom...</div>
+  </div>
+
+  <footer>
+    ⏳ One new idiom unlocks each calendar day • Come back daily to complete your 90-day journey
+  </footer>
+</div>
+
+<script>
+  // ----------------------------------------------
+  // 90 IDIOMS DATABASE (full list)
+  // ----------------------------------------------
+  const IDIOMS = [
+    { day: 1, phrase: "Break the ice", meaning: "To do or say something that relieves tension, awkwardness, or formality in a social situation, making people feel more comfortable with each other.", example: "At the start of the workshop, our manager told a funny story about his first job to break the ice, and soon everyone was chatting freely." },
+    { day: 2, phrase: "Hit the nail on the head", meaning: "To be exactly right about something or to describe a situation perfectly.", example: "When you said I'm worried about the future, you really hit the nail on the head." },
+    { day: 3, phrase: "Piece of cake", meaning: "Something that is very easy to accomplish.", example: "After years of coding, that programming assignment was a piece of cake." },
+    { day: 4, phrase: "Under the weather", meaning: "Feeling slightly ill or unwell.", example: "I think I'll skip the party tonight — I'm feeling a bit under the weather." },
+    { day: 5, phrase: "Bite the bullet", meaning: "To endure a painful or difficult situation with courage.", example: "I hate going to the dentist, but I need to bite the bullet and make an appointment." },
+    { day: 6, phrase: "Cost an arm and a leg", meaning: "To be extremely expensive.", example: "Repairing my old car cost an arm and a leg, but I need it for work." },
+    { day: 7, phrase: "Spill the beans", meaning: "To reveal a secret, often accidentally.", example: "We wanted the gift to be a surprise, but my little sister spilled the beans." },
+    { day: 8, phrase: "Let the cat out of the bag", meaning: "To unintentionally reveal a secret.", example: "I let the cat out of the bag about the promotion before it was official." },
+    { day: 9, phrase: "Once in a blue moon", meaning: "Very rarely; almost never.", example: "My husband cooks dinner once in a blue moon, but it's always delicious." },
+    { day: 10, phrase: "Cut corners", meaning: "To do something poorly to save time or money.", example: "The contractor cut corners, and now the roof leaks." },
+    { day: 11, phrase: "Hit the sack", meaning: "To go to bed or go to sleep.", example: "It's been a long day — I'm ready to hit the sack." },
+    { day: 12, phrase: "Burn the midnight oil", meaning: "To work late into the night.", example: "She burned the midnight oil to finish her thesis before the deadline." },
+    { day: 13, phrase: "Miss the boat", meaning: "To miss an opportunity.", example: "I didn't apply for the internship early, and I totally missed the boat." },
+    { day: 14, phrase: "Pull someone's leg", meaning: "To joke or tease someone playfully.", example: "Relax, I'm just pulling your leg — I didn't actually lose your keys." },
+    { day: 15, phrase: "A blessing in disguise", meaning: "Something that seems bad at first but results in something good.", example: "Losing that job was a blessing in disguise — I started my own company." },
+    { day: 16, phrase: "Get out of hand", meaning: "To become uncontrollable or chaotic.", example: "The party got out of hand when strangers started arriving." },
+    { day: 17, phrase: "Back to the drawing board", meaning: "To start over after a failure.", example: "Our prototype failed the test — it's back to the drawing board." },
+    { day: 18, phrase: "Ring a bell", meaning: "To sound familiar; to trigger a memory.", example: "The name Maria rings a bell — I think we met at a conference." },
+    { day: 19, phrase: "Beat around the bush", meaning: "To avoid talking directly about something important.", example: "Stop beating around the bush — just tell me if you broke the vase." },
+    { day: 20, phrase: "Steal someone's thunder", meaning: "To take attention away from someone else's achievement.", example: "I announced my engagement, but my sister stole my thunder with her pregnancy news." },
+    { day: 21, phrase: "Keep your chin up", meaning: "To remain cheerful and optimistic during tough times.", example: "I know you're stressed about exams, but keep your chin up — you'll do great." },
+    { day: 22, phrase: "When pigs fly", meaning: "Something that will never happen.", example: "My messy roommate will clean the kitchen when pigs fly." },
+    { day: 23, phrase: "Caught between a rock and a hard place", meaning: "In a dilemma with two equally bad choices.", example: "I was between a rock and a hard place — either miss my best friend's wedding or lose my job." },
+    { day: 24, phrase: "Face the music", meaning: "To accept the consequences of one's actions.", example: "He cheated on the test, and now he has to face the music." },
+    { day: 25, phrase: "Butter someone up", meaning: "To flatter someone in order to gain a favor.", example: "My son tried to butter me up with compliments before asking for a new phone." },
+    { day: 26, phrase: "Hit the road", meaning: "To leave or begin a journey.", example: "We should hit the road before sunrise to avoid traffic." },
+    { day: 27, phrase: "Go the extra mile", meaning: "To make more effort than expected or required.", example: "Our customer support team always goes the extra mile to solve problems." },
+    { day: 28, phrase: "Play it by ear", meaning: "To decide on a course of action as events unfold, without a fixed plan.", example: "We don't have a schedule for Sunday — let's just play it by ear." },
+    { day: 29, phrase: "See eye to eye", meaning: "To agree with someone; to share the same opinion.", example: "My boss and I don't always see eye to eye on marketing strategies." },
+    { day: 30, phrase: "Hang in there", meaning: "To persevere and not give up despite difficulties.", example: "I know training is tough, but hang in there — it will pay off." },
+    { day: 31, phrase: "Raining cats and dogs", meaning: "To rain very heavily.", example: "We had to cancel the picnic because it was raining cats and dogs." },
+    { day: 32, phrase: "Speak of the devil", meaning: "When someone appears just after being mentioned.", example: "Speak of the devil! We were just talking about your new book." },
+    { day: 33, phrase: "Put all your eggs in one basket", meaning: "To risk everything on a single venture or plan.", example: "Diversify your investments — don't put all your eggs in one basket." },
+    { day: 34, phrase: "The ball is in your court", meaning: "It's now your turn to take action or make a decision.", example: "I've made my proposal — the ball is in your court now." },
+    { day: 35, phrase: "Barking up the wrong tree", meaning: "To follow a false assumption or wrong course of action.", example: "If you think I took your pen, you're barking up the wrong tree." },
+    { day: 36, phrase: "Every cloud has a silver lining", meaning: "There is something positive in every negative situation.", example: "Missing the bus was frustrating, but every cloud has a silver lining — I met an old friend while waiting." },
+    { day: 37, phrase: "Don't cry over spilled milk", meaning: "Don't be upset about something that has already happened and cannot be changed.", example: "I know you regret buying that car, but don't cry over spilled milk." },
+    { day: 38, phrase: "Elephant in the room", meaning: "An obvious problem or controversial issue that everyone avoids discussing.", example: "We need to address the elephant in the room: our company's debt." },
+    { day: 39, phrase: "Throw in the towel", meaning: "To give up; to admit defeat.", example: "After twenty failed attempts, he finally threw in the towel." },
+    { day: 40, phrase: "Up in the air", meaning: "Uncertain; not yet decided.", example: "Our vacation plans are still up in the air because of the weather." },
+    { day: 41, phrase: "Add fuel to the fire", meaning: "To make a bad situation worse.", example: "Bringing up old arguments only added fuel to the fire." },
+    { day: 42, phrase: "Wrap your head around", meaning: "To understand something complex or difficult.", example: "It's hard to wrap my head around these quantum physics concepts." },
+    { day: 43, phrase: "A dime a dozen", meaning: "Very common and not special.", example: "In this city, coffee shops are a dime a dozen." },
+    { day: 44, phrase: "Hit the ground running", meaning: "To start something energetically and with immediate impact.", example: "She joined the sales team and hit the ground running with three new clients." },
+    { day: 45, phrase: "Steal the show", meaning: "To attract the most attention and praise.", example: "The young actress stole the show with her emotional performance." },
+    { day: 46, phrase: "On cloud nine", meaning: "Extremely happy and joyful.", example: "Ever since she got the job offer, she's been on cloud nine." },
+    { day: 47, phrase: "Keep an eye on", meaning: "To watch or monitor carefully.", example: "Can you keep an eye on my suitcase while I grab a coffee?" },
+    { day: 48, phrase: "Call it a day", meaning: "To stop working for the rest of the day.", example: "We've been coding for eight hours — let's call it a day." },
+    { day: 49, phrase: "Fish out of water", meaning: "To feel uncomfortable or out of place in a situation.", example: "At the formal gala, I felt like a fish out of water in my casual clothes." },
+    { day: 50, phrase: "Kill two birds with one stone", meaning: "To accomplish two tasks with a single action.", example: "I called my mom while walking the dog — killing two birds with one stone." },
+    { day: 51, phrase: "Out of the blue", meaning: "Suddenly and unexpectedly.", example: "He called me out of the blue after five years of silence." },
+    { day: 52, phrase: "Sit tight", meaning: "To wait patiently without taking action.", example: "The doctor will see you soon — just sit tight." },
+    { day: 53, phrase: "Cut to the chase", meaning: "To get to the point without wasting time.", example: "We're running late, so let's cut to the chase." },
+    { day: 54, phrase: "Pull yourself together", meaning: "To calm down and regain control of your emotions.", example: "I know you're upset, but you need to pull yourself together for the meeting." },
+    { day: 55, phrase: "Make a long story short", meaning: "To summarize a lengthy explanation.", example: "To make a long story short, I missed the flight and had to rebook." },
+    { day: 56, phrase: "Take with a grain of salt", meaning: "To not take something too seriously because it might be exaggerated.", example: "He tends to brag, so take his stories with a grain of salt." },
+    { day: 57, phrase: "Through thick and thin", meaning: "Through good times and bad times.", example: "My best friend has stood by me through thick and thin." },
+    { day: 58, phrase: "Rome wasn't built in a day", meaning: "Great achievements take time and patience.", example: "Don't expect to learn guitar in a week — Rome wasn't built in a day." },
+    { day: 59, phrase: "Cross that bridge when you come to it", meaning: "To deal with a problem only when it arises.", example: "We might need more funding, but we'll cross that bridge when we come to it." },
+    { day: 60, phrase: "Bite off more than you can chew", meaning: "To take on more responsibility than you can handle.", example: "By accepting three part-time jobs, she bit off more than she could chew." },
+    { day: 61, phrase: "Get a taste of your own medicine", meaning: "To experience the same bad treatment you give others.", example: "He's always rude, and today he got a taste of his own medicine." },
+    { day: 62, phrase: "Let sleeping dogs lie", meaning: "To avoid revisiting past conflicts or problems.", example: "Bringing up that old argument would be risky — let sleeping dogs lie." },
+    { day: 63, phrase: "You can say that again", meaning: "I strongly agree with you.", example: "'This summer is unbearably hot.' 'You can say that again!'" },
+    { day: 64, phrase: "Actions speak louder than words", meaning: "What you do is more important than what you say.", example: "He promises to help, but actions speak louder than words." },
+    { day: 65, phrase: "Get your act together", meaning: "To become organized and focused.", example: "You need to get your act together before the final exam." },
+    { day: 66, phrase: "A penny for your thoughts", meaning: "A way to ask someone what they are thinking about.", example: "You look deep in thought — a penny for your thoughts?" },
+    { day: 67, phrase: "Jump on the bandwagon", meaning: "To join a popular trend or activity.", example: "When everyone started using that social media app, I jumped on the bandwagon too." },
+    { day: 68, phrase: "The last straw", meaning: "The final problem that causes a collapse or breakdown.", example: "When he arrived late again, that was the last straw — I ended the relationship." },
+    { day: 69, phrase: "Make ends meet", meaning: "To have just enough money to cover basic expenses.", example: "With rising rent, it's becoming hard to make ends meet." },
+    { day: 70, phrase: "Not playing with a full deck", meaning: "To be lacking intelligence or sanity (humorous).", example: "His plan makes no sense — I don't think he's playing with a full deck." },
+    { day: 71, phrase: "Off the hook", meaning: "Released from blame, obligation, or a difficult situation.", example: "The new evidence proved his innocence, so he's off the hook." },
+    { day: 72, phrase: "Shed light on", meaning: "To clarify or explain something.", example: "The investigation shed light on the company's financial mismanagement." },
+    { day: 73, phrase: "Step up your game", meaning: "To improve your performance or skills.", example: "If you want a promotion, you need to step up your game." },
+    { day: 74, phrase: "Take it easy", meaning: "To relax and not exert too much effort.", example: "It's Saturday — time to take it easy and watch a movie." },
+    { day: 75, phrase: "The tip of the iceberg", meaning: "A small visible part of a much larger problem.", example: "The recent layoffs are just the tip of the iceberg." },
+    { day: 76, phrase: "Turn a blind eye", meaning: "To deliberately ignore something wrong.", example: "The supervisor turned a blind eye to minor safety violations." },
+    { day: 77, phrase: "Up to par", meaning: "Meeting the expected standard.", example: "My performance this quarter wasn't up to par." },
+    { day: 78, phrase: "Variety is the spice of life", meaning: "Doing different things makes life interesting.", example: "I love trying new hobbies — variety is the spice of life." },
+    { day: 79, phrase: "Wet behind the ears", meaning: "Inexperienced or new to something.", example: "He's a talented intern but still a bit wet behind the ears." },
+    { day: 80, phrase: "X marks the spot", meaning: "The exact location of something.", example: "Follow the treasure map — X marks the spot!" },
+    { day: 81, phrase: "You get what you pay for", meaning: "Cheap items are often low quality.", example: "That $10 pair of shoes fell apart in a week — you get what you pay for." },
+    { day: 82, phrase: "Zero in on", meaning: "To focus closely on something.", example: "The detective zeroed in on the main suspect." },
+    { day: 83, phrase: "A wild goose chase", meaning: "A pointless or hopeless search.", example: "Looking for my keys in the dark was a wild goose chase." },
+    { day: 84, phrase: "Blow off steam", meaning: "To release pent-up energy or anger.", example: "I went for a long run to blow off steam after the argument." },
+    { day: 85, phrase: "Clear the air", meaning: "To resolve a misunderstanding or tension.", example: "We had an honest conversation to clear the air between us." },
+    { day: 86, phrase: "Down to the wire", meaning: "Until the very last moment.", example: "The election results came down to the wire — it was incredibly close." },
+    { day: 87, phrase: "Easy does it", meaning: "To do something slowly and carefully.", example: "Easy does it — that ladder is unstable." },
+    { day: 88, phrase: "Full of beans", meaning: "Energetic and lively.", example: "The kids are full of beans after eating all that candy." },
+    { day: 89, phrase: "Get off your high horse", meaning: "To stop acting superior or arrogant.", example: "You need to get off your high horse and listen to other people's ideas." },
+    { day: 90, phrase: "Keep your nose to the grindstone", meaning: "To work hard and persistently.", example: "She kept her nose to the grindstone and finally passed the bar exam." }
+  ];
+
+  // ---------- CORE LOGIC: ONE IDIOM PER CALENDAR DAY ----------
+  // We define a "start date" for the 90-day journey.
+  // You can change START_DATE to any day you want to begin.
+  // By default, the journey starts from the first day this page is opened.
+  // But to make it consistent across devices, we store the start date in localStorage.
+  
+  let START_TIMESTAMP = null;  // will be loaded from localStorage or set to today
+
+  function getOrCreateStartDate() {
+    const stored = localStorage.getItem("lid_start_date");
+    if (stored) {
+      return new Date(parseInt(stored));
+    } else {
+      // first time user: start today
+      const now = new Date();
+      now.setHours(0, 0, 0, 0); // normalize to midnight
+      localStorage.setItem("lid_start_date", now.getTime().toString());
+      return now;
+    }
+  }
+
+  function getCurrentDayNumber() {
+    const start = getOrCreateStartDate();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diffTime = today - start;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    // Day 1 is start date (diffDays = 0)
+    let currentDay = diffDays + 1;
+    if (currentDay < 1) currentDay = 1;      // not started yet? show day 1 preview but locked?
+    if (currentDay > 90) currentDay = 90;    // cap at 90
+    return currentDay;
+  }
+
+  function isDayUnlocked(dayNum) {
+    const currentUnlocked = getCurrentDayNumber();
+    return dayNum <= currentUnlocked;
+  }
+
+  function getTodaysIdiom() {
+    const todayDay = getCurrentDayNumber();
+    // find idiom with day == todayDay
+    const idiom = IDIOMS.find(i => i.day === todayDay);
+    if (idiom) return idiom;
+    // fallback (should never happen)
+    return IDIOMS[0];
+  }
+
+  // render the daily view (today's idiom, or locked future days)
+  function renderToday() {
+    const container = document.getElementById("dynamicContent");
+    const dayCounterSpan = document.getElementById("dayCounterDisplay");
+    if (!container) return;
+
+    const currentDayNum = getCurrentDayNumber();
+    const todayIdiom = getTodaysIdiom();
+    const totalDays = 90;
+    const progressPercent = (currentDayNum / totalDays) * 100;
+
+    if (dayCounterSpan) {
+      dayCounterSpan.innerText = `📅 Day ${currentDayNum} of ${totalDays}`;
+    }
+
+    // for idioms of current day (always unlocked)
+    const idiom = todayIdiom;
+    
+    // also show if the user tries to peek into future? but we always show only current day idiom.
+    // but we provide a message: tomorrow's idiom will appear naturally.
+    const isFuture = (currentDayNum > idiom.day) ? false : (idiom.day === currentDayNum);
+    
+    const html = `
+      <div class="idiom-header">
+        <div class="day-badge">✨ today's idiom ✨</div>
+        <div class="idiom-phrase">“${escapeHtml(idiom.phrase)}”</div>
+        <div class="phonetic">📘 day ${idiom.day} / 90</div>
+      </div>
+
+      <div class="meaning-box">
+        <div class="meaning-label">📖 MEANING</div>
+        <div class="meaning-text">${escapeHtml(idiom.meaning)}</div>
+      </div>
+
+      <div class="example-box">
+        <div class="example-label">💬 EXAMPLE SENTENCE</div>
+        <div class="example-text">“${escapeHtml(idiom.example)}”</div>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-bar-container">
+          <div class="progress-fill" style="width: ${progressPercent}%;"></div>
+        </div>
+        <div class="progress-text">${currentDayNum}/90 days</div>
+      </div>
+
+      <div class="calendar-info">
+        🗓️ Your journey started on ${formatDate(getOrCreateStartDate())}<br>
+        ${currentDayNum < 90 ? `✨ Next idiom unlocks tomorrow! ✨` : `🏆 Congratulations! You've completed all 90 idioms! 🏆`}
+      </div>
+      
+      <div class="nav-buttons">
+        <button class="btn" id="resetJourneyBtn" style="background:#f0f4f8;">🔄 Reset Journey (start over)</button>
+      </div>
+    `;
+    
+    container.innerHTML = html;
+    
+    const resetBtn = document.getElementById("resetJourneyBtn");
+    if (resetBtn) {
+      resetBtn.addEventListener("click", () => {
+        if (confirm("Are you sure? Resetting will set today as Day 1 again. All progress will be lost.")) {
+          const newStart = new Date();
+          newStart.setHours(0,0,0,0);
+          localStorage.setItem("lid_start_date", newStart.getTime().toString());
+          // re-render
+          renderToday();
+          // update day counter display manually
+          const newDay = getCurrentDayNumber();
+          if(dayCounterSpan) dayCounterSpan.innerText = `📅 Day ${newDay} of 90`;
+        }
+      });
+    }
+  }
+
+  function formatDate(date) {
+    return date.toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>]/g, function(m) {
+      if (m === '&') return '&amp;';
+      if (m === '<') return '&lt;';
+      if (m === '>') return '&gt;';
+      return m;
+    });
+  }
+
+  // initialize
+  renderToday();
+</script>
+</body>
+</html>
